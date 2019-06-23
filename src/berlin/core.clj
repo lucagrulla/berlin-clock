@@ -1,19 +1,20 @@
 (ns berlin.core
   (:require [clojure.string :as s]))
 
-(defn hour [h]
+
+(defmulti transform (fn [x _] x))
+(defmethod transform 0 [_ h]
   (let [active-hours (quot h 5);; block of 5 hours
         modulus (mod h 5);; single hours
-        a (reduce (fn [acc v]
-                    (str acc (if (< v active-hours) "R" "O"))) 
-                  "" (range 4))
-        b (reduce (fn [acc v]
-                    (str acc (if (< v modulus) "R" "O")))
-                  "" (range 4))]
-
+        a (s/join (map (fn [v]
+                         (if (< v active-hours) "R" "O")) 
+                       (range 4)))
+        b (s/join (map (fn [v]
+                         (if (< v modulus) "R" "O"))
+                       (range 4)))]
     (s/join  " " [a b])))
 
-(defn minute [m]
+(defmethod transform 1 [_ m]
   (let [active-minutes (quot m 5)
         modulus (mod m 5)
         a (s/join (map (fn [v]
@@ -27,26 +28,14 @@
                          (if (< x modulus) "Y" "O"))
                        (range 4)))]
     (s/join " " [a b])))
-
-(defn seconds [s]
+(defmethod transform 2 [_ s]
   (if (even? s) "Y" "O"))
 
 (defn berlin [i]
   (let [token (s/split i #":")
-        dd (map-indexed (fn [idx item]
-                          (let [i (Integer/parseInt item)]
-                            (case idx 
-                              0 (hour i)
-                              1 (minute i)
-                              2 (seconds i))))
-                        token)
-        secs (last dd)
-        rest (butlast dd)]
-    (s/join " " (conj rest secs))
-    ))
-
-
-
-
-
-
+        berlin-tokens (->> token
+                (map (fn [x] (Integer/parseInt x)))
+                (map-indexed transform))
+        secs (last berlin-tokens)
+        rest (butlast berlin-tokens)]
+    (s/join " " (conj rest secs))))
