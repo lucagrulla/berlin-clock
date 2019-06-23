@@ -36,6 +36,7 @@
 
 (defn berlin [i]
   ;;TODO input validation
+  ;;TODO make it a CLI
   (let [clock-order [:seconds :hours :minutes]
         clock-tokens (->> (s/split i #":")
                           (zipmap `(:hours :minutes :seconds)))]
