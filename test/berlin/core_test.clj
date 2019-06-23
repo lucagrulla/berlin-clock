@@ -4,22 +4,22 @@
 
 (deftest berlin-clock
   (testing "hours"
-    (is (= (transform :hours 10) ["RROO" "OOOO"]))
-    (is (= (transform :hours 5) ["ROOO" "OOOO"]))
-    (is (= (transform :hours 13) ["RROO" "RRRO"]))
-    (is (= (transform :hours 4) ["OOOO" "RRRR"])))
+    (is (= ["RROO" "OOOO"] (transform :hours 10)))
+    (is (= ["ROOO" "OOOO"] (transform :hours 5)))
+    (is (= ["RROO" "RRRO"] (transform :hours 13)))
+    (is (= ["OOOO" "RRRR"] (transform :hours 4))))
   (testing "minutes"
-    (is (= (transform :minutes 7) ["YOOOOOOOOOO" "YYOO"]))
-    (is (= (transform :minutes 10) ["YYOOOOOOOOO" "OOOO"]))
-    (is (= (transform :minutes 15) ["YYROOOOOOOO" "OOOO"]))
-    (is (= (transform :minutes 30) ["YYRYYROOOOO" "OOOO"]))
-    (is (= (transform :minutes 45) ["YYRYYRYYROO" "OOOO"]))
-    (is (= (transform :minutes 52) ["YYRYYRYYRYO" "YYOO"])))
+    (is (= ["YOOOOOOOOOO" "YYOO"] (transform :minutes 7)))
+    (is (= ["YYOOOOOOOOO" "OOOO"] (transform :minutes 10)))
+    (is (= ["YYROOOOOOOO" "OOOO"] (transform :minutes 15)))
+    (is (= ["YYRYYROOOOO" "OOOO"] (transform :minutes 30)))
+    (is (= ["YYRYYRYYROO" "OOOO"] (transform :minutes 45)))
+    (is (= ["YYRYYRYYRYO" "YYOO"] (transform :minutes 52))))
   (testing "seconds"
-    (is (= (transform :seconds 10) "Y"))
-    (is (= (transform :seconds 0) "Y")))
-    (is (= (transform :seconds 11) "O"))
+    (is (= "Y" (transform :seconds 10)))
+    (is (= "Y" (transform :seconds 0))))
+    (is (= "O" (transform :seconds 11)))
   (testing "clock"
-    (is (= (berlin "10:33:10") "Y RROO OOOO YYRYYROOOOO YYYO"))
-    (is (= (berlin "12:56:01") "O RROO RROO YYRYYRYYRYY YOOO"))))
+    (is (= "Y RROO OOOO YYRYYROOOOO YYYO" (berlin "10:33:10")))
+    (is (= "O RROO RROO YYRYYRYYRYY YOOO" (berlin "12:56:01")))))
 
